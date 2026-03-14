@@ -1,0 +1,23 @@
+# Web Framework & API
+Django
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+
+# Database & Environment
+psycopg[binary]
+python-dotenv
+
+# External Services (Email & Media)
+sendgrid
+cloudinary
+
+# Production & Deployment
+gunicorn
+whitenoise
+
+# Testing & Linting (Development)
+pytest
+pytest-django
+black
+ruff
