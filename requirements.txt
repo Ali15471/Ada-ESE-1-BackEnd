@@ -1,23 +1,23 @@
 # Web Framework & API
-Django
-djangorestframework
-djangorestframework-simplejwt
-django-cors-headers
+Django~=5.2.0
+djangorestframework~=3.16.0
+djangorestframework-simplejwt~=5.5.0
+django-cors-headers~=4.9.0
 
 # Database & Environment
-psycopg[binary]
-python-dotenv
+psycopg[binary]~=3.2.0
+python-dotenv~=1.0.0
 
 # External Services (Email & Media)
-sendgrid
-cloudinary
+sendgrid~=6.11.0
+cloudinary~=1.41.0
 
 # Production & Deployment
-gunicorn
-whitenoise
+gunicorn~=23.0.0
+whitenoise~=6.8.0
 
 # Testing & Linting (Development)
-pytest
-pytest-django
-black
-ruff
+pytest~=8.3.0
+pytest-django~=4.9.0
+black~=25.1.0
+ruff~=0.9.0
