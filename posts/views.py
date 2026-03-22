@@ -1,4 +1,4 @@
-from django.shortcuts import models
+from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, permissions, filters
 from .models import Post
