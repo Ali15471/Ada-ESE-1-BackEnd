@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, permissions, filters
 from .models import Post
@@ -27,9 +27,9 @@ class PostListCreateView(generics.ListCreateAPIView):
         queryset = Post.objects.all()
 
         if user.is_authenticated:
-            queryset = queryset.filter(models.Q(status='published') | models.Q(author=self.request.user))
+            queryset = queryset.filter(models.Q(status='PUBLISHED') | models.Q(author=self.request.user))
         else:
-            queryset = queryset.filter(status='published')
+            queryset = queryset.filter(status='PUBLISHED')
         return queryset
 
     def perform_create(self, serializer):
@@ -38,14 +38,14 @@ class PostListCreateView(generics.ListCreateAPIView):
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthorOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
         queryset = Post.objects.all()
 
         if user.is_authenticated:
-            queryset = queryset.filter(models.Q(status='published') | models.Q(author=self.request.user))
+            queryset = queryset.filter(models.Q(status='PUBLISHED') | models.Q(author=self.request.user))
         else:
-            queryset = queryset.filter(status='published')
+            queryset = queryset.filter(status='PUBLISHED')
         return queryset
