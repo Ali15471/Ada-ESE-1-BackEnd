@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -155,3 +156,11 @@ ANYMAIL = {
 }
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
+# Cloudinary configuration
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True,
+)
