@@ -1,4 +1,3 @@
-from django.db import models
 from rest_framework import generics, permissions
 from .models import Comment
 from .serializers import CommentSerializer
