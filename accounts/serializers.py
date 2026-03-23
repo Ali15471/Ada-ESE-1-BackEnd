@@ -38,3 +38,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         if len(value) > 144:
             raise serializers.ValidationError("Bio must be 144 characters or less.")
         return value
+    
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        if obj.profile_picture:
+            data['profile_picture'] = obj.profile_picture.url
+        return data
