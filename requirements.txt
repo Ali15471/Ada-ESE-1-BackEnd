@@ -12,6 +12,7 @@ python-dotenv~=1.0.0
 # External Services (Email & Media)
 sendgrid~=6.11.0
 cloudinary~=1.41.0
+django-anymail[sendgrid]~=14.0
 
 # Production & Deployment
 gunicorn~=23.0.0
