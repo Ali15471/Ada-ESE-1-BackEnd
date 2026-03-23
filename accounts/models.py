@@ -8,4 +8,5 @@ class Profile(models.Model):
     bio = models.TextField(max_length=144,blank=True)
     profile_picture = models.URLField(blank=True)
     def __str__(self):
-        return f'{self.display_name} Profile' or f'{self.user.username} Profile'
+        name = self.display_name or self.user.username
+        return f'{name} Profile'

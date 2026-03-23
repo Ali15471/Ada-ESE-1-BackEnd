@@ -24,18 +24,18 @@ class PasswordResetRequestView(APIView):
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
             token = generator.make_token(user)
             reset_link = f"{settings.FRONTEND_URL}/reset-password/{uidb64}/{token}/"
-        except User.DoesNotExist:
-            return Response({"error": "User with this email does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
-        send_mail(
+            send_mail(
             subject = "Password Reset Request",
             message = f"Click the link to reset your password: {reset_link}",
             from_email = settings.DEFAULT_FROM_EMAIL,
             recipient_list = [email],
             fail_silently=False,
-        )
+            )
+        except User.DoesNotExist:
+            pass
 
-        return Response({"message": "Password reset link has been sent to your email."}, status=status.HTTP_200_OK)
+        return Response({"message": "If an email is linked to an account, you will receive a password reset link."}, status=status.HTTP_200_OK)
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [permissions.AllowAny]
