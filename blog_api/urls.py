@@ -27,4 +27,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("accounts.urls")),
     path("api/posts/", include("posts.urls")),
+    path("api/posts/<int:post_id>/comments/", include("comments.urls")),
 ]
