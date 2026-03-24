@@ -8,6 +8,7 @@ django-filter~=25.2
 # Database & Environment
 psycopg[binary]~=3.2.0
 python-dotenv~=1.0.0
+dj-database-url~=2.3.0
 
 # External Services (Email & Media)
 cloudinary~=1.41.0
