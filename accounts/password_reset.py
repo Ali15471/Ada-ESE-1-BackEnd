@@ -10,13 +10,16 @@ from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+
 class PasswordResetRequestView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         email = request.data.get("email")
         if not email:
-            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
             user = User.objects.get(email=email)
@@ -26,16 +29,22 @@ class PasswordResetRequestView(APIView):
             reset_link = f"{settings.FRONTEND_URL}/reset-password/{uidb64}/{token}/"
 
             send_mail(
-            subject = "Password Reset Request",
-            message = f"Click the link to reset your password: {reset_link}",
-            from_email = settings.DEFAULT_FROM_EMAIL,
-            recipient_list = [email],
-            fail_silently=False,
+                subject="Password Reset Request",
+                message=f"Click the link to reset your password: {reset_link}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=False,
             )
         except User.DoesNotExist:
             pass
 
-        return Response({"message": "If an email is linked to an account, you will receive a password reset link."}, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "message": "If an email is linked to an account, you will receive a password reset link."
+            },
+            status=status.HTTP_200_OK,
+        )
+
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -45,15 +54,23 @@ class PasswordResetConfirmView(APIView):
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return Response({"error": "Invalid link."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid link."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         generator = PasswordResetTokenGenerator()
         if not generator.check_token(user, token):
-            return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid or expired token."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         new_password = request.data.get("new_password")
         if not new_password:
-            return Response({"error": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "New password is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             validate_password(new_password, user)
@@ -63,4 +80,7 @@ class PasswordResetConfirmView(APIView):
         user.set_password(new_password)
         user.save()
 
-        return Response({"message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Password has been reset successfully."},
+            status=status.HTTP_200_OK,
+        )
