@@ -15,7 +15,7 @@ def create_user(db):
     user = User.objects.create_user(
         username='testuser',
         email='testuser@example.com',
-        password='testpassword'
+        password='TestPassword123!'
     )
     return user
 
@@ -23,7 +23,7 @@ def create_user(db):
 def authenticated_client(api_client, create_user):
     response = api_client.post('/api/auth/login/', {
         'username': 'testuser',
-        'password': 'testpassword'
+        'password': 'TestPassword123!'
     }, format='json')
     api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {response.data["access"]}')
     return api_client
@@ -33,7 +33,7 @@ def other_user(db):
     user = User.objects.create_user(
         username='otheruser',
         email='otheruser@example.com',
-        password='otherpassword'
+        password='TestPassword123!'
     )
     return user
 
@@ -41,7 +41,7 @@ def other_user(db):
 def authenticated_client_other(api_client, other_user):
     response = api_client.post('/api/auth/login/', {
         'username': 'otheruser',
-        'password': 'otherpassword'
+        'password': 'TestPassword123!'
     }, format='json')
     api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {response.data["access"]}')
     return api_client
@@ -52,7 +52,7 @@ def create_post(db, create_user):
         title='Test Post',
         content='This is a test post.',
         author=create_user,
-        status='published'
+        status='PUBLISHED'
     )
     return post
 
@@ -87,7 +87,7 @@ def test_create_comment_unauthenticated(api_client, create_post):
 @pytest.mark.django_db
 def test_delete_comment_by_other_user(authenticated_client_other, create_comment):
     # Attempt to delete the comment created by testuser
-    response = authenticated_client_other.delete(f'/api/comments/{create_comment.id}/')
+    response = authenticated_client_other.delete(f'/api/posts/{create_comment.post.id}/comments/{create_comment.id}/')
     assert response.status_code == 403
 
 @pytest.mark.django_db
@@ -97,7 +97,7 @@ def test_post_scoped_comments(api_client, create_post, create_comment):
         title='Other Post',
         content='This is another post.',
         author=create_comment.author,
-        status='published'
+        status='PUBLISHED'
     )
     Comment.objects.create(
         content='Comment for other post.',
