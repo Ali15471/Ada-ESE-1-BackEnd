@@ -45,14 +45,14 @@ def create_draft_post(db, create_user):
 def test_unauthenticated_user_only_sees_published_posts(api_client, create_post, create_draft_post):
     response = api_client.get('/api/posts/')
     assert response.status_code == 200
-    titles = [post['title'] for post in response.data['results']]
+    titles = [post['title'] for post in response.data]
     assert 'Test Post' in titles
 
 @pytest.mark.django_db
 def test_autheticated_user_can_see_own_draft_posts(authenticated_client, create_draft_post):
     response = authenticated_client.get('/api/posts/')
     assert response.status_code == 200
-    titles = [post['title'] for post in response.data['results']]
+    titles = [post['title'] for post in response.data]
     assert 'Draft Post' in titles
 
 @pytest.mark.django_db
