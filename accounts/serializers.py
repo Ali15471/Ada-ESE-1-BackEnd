@@ -36,7 +36,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ["username", "email", "display_name", "bio", "profile_picture"]
+        fields = ["username", "email", "bio", "profile_picture"]
 
     def validate_display_name(self, value):
         if len(value) > 50:
