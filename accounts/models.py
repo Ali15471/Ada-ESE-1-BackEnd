@@ -8,7 +8,18 @@ from cloudinary.models import CloudinaryField
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     bio = models.TextField(max_length=144, blank=True)
-    profile_picture = CloudinaryField("image", blank=True, null=True)
+    profile_picture = CloudinaryField(
+    "image",
+    blank=True,
+    null=True,
+    transformation={
+        "width": 300,
+        "height": 300,
+        "crop": "fit",
+        "quality": "auto",
+        "fetch_format": "auto",
+    }
+)
 
     def __str__(self):
         name = self.user.username

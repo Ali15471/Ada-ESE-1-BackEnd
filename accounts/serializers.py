@@ -38,13 +38,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ["username", "email", "bio", "profile_picture"]
 
-    def validate_display_name(self, value):
-        if len(value) > 50:
-            raise serializers.ValidationError(
-                "Display name must be 50 characters or less."
-            )
-        return value
-
     def validate_bio(self, value):
         if len(value) > 144:
             raise serializers.ValidationError("Bio must be 144 characters or less.")
@@ -55,3 +48,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         if obj.profile_picture:
             data["profile_picture"] = obj.profile_picture.url
         return data
+
+    def validate_profile_picture(self, image):
+        if not image:
+            return image
+        if image.size > 2 * 1024 * 1024:
+            raise serializers.ValidationError("Image must be under 2MB.")
+        return image
