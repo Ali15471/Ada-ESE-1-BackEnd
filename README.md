@@ -137,7 +137,7 @@ Deployed on Render using `render.yaml`. The `build.sh` script handles migrations
 
 Set all other environment variables in the Render dashboard.
 
-Live API: `<your-render-url>`
+Live API: `https://blog-api-jo4b.onrender.com`
 
 ## Security
 
