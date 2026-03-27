@@ -78,7 +78,7 @@ def test_unauthenticated_user_only_sees_published_posts(
 
 
 @pytest.mark.django_db
-def test_autheticated_user_can_see_own_draft_posts(
+def test_authenticated_user_can_see_own_draft_posts(
     authenticated_client, create_draft_post
 ):
     response = authenticated_client.get("/api/posts/")
