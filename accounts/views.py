@@ -37,7 +37,10 @@ class ProfileView(APIView):
         new_username = request.data.get("username")
         if new_username and new_username != user.username:
             if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
-                return Response({"username": ["This username is already taken."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"username": ["This username is already taken."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
         user.username = new_username
         user.save()
 
