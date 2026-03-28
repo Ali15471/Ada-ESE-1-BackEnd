@@ -26,7 +26,7 @@ services:
       - key: CLOUDINARY_API_SECRET
         sync: false
       - key: ALLOWED_HOSTS
-        value: https://blog-api-jo4b.onrender.com
+        value: blog-api-jo4b.onrender.com
 
 databases:
   - name: blog-db
