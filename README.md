@@ -159,6 +159,16 @@ The workflow file is located at `.github/workflows/django.yml`.
 - Authors can only modify their own content (`IsAuthorOrReadOnly` permission class)
 - Secrets managed via environment variables — never committed to version control
 
-## AI Usage
+## AI Declaration
 
-Claude Code (Anthropic) was used to assist with debugging, deployment configuration, and code review. All code was reviewed, understood, and integrated manually.
+**Tool used:** Claude Code (Anthropic)
+
+Claude Code was used in the following specific ways during development:
+
+- **Deployment configuration** — assisted with writing the `render.yaml` and `build.sh` scripts, and debugging `ALLOWED_HOSTS` and `CORS` configuration for the Render deployment
+- **CI/CD setup** — helped draft the GitHub Actions workflow (`django.yml`), which was reviewed and understood before being committed
+- **Code review** — used to review the `IsAuthorOrReadOnly` permission class and password reset token flow for correctness; suggestions were evaluated and integrated manually
+- **Debugging** — used to diagnose a `pytest` configuration issue with `DATABASE_URL` in the CI environment; the fix was understood and applied manually
+- **README drafting** — used to help structure and draft this documentation, which was reviewed and edited to accurately reflect the actual implementation
+
+All core application logic — models, views, serializers, authentication, and tests — was written independently. AI-assisted content was critically evaluated before inclusion. Any code generated or suggested by AI was read, understood, and manually integrated; nothing was accepted without review.
