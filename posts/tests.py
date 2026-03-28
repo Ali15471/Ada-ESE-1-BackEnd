@@ -73,7 +73,7 @@ def test_unauthenticated_user_only_sees_published_posts(
 ):
     response = api_client.get("/api/posts/")
     assert response.status_code == 200
-    titles = [post["title"] for post in response.data]
+    titles = [post["title"] for post in response.data["results"]]
     assert "Test Post" in titles
 
 
@@ -83,7 +83,7 @@ def test_authenticated_user_can_see_own_draft_posts(
 ):
     response = authenticated_client.get("/api/posts/")
     assert response.status_code == 200
-    titles = [post["title"] for post in response.data]
+    titles = [post["title"] for post in response.data["results"]]
     assert "Draft Post" in titles
 
 
@@ -101,7 +101,7 @@ def test_create_post(authenticated_client):
 
 
 @pytest.mark.django_db
-def test_only_author_can_update_post(authenticated_client_other, create_post):
+def test_prevent_unauthorized_post_updates(authenticated_client_other, create_post):
     response = authenticated_client_other.put(
         f"/api/posts/{create_post.id}/",
         {
@@ -115,7 +115,44 @@ def test_only_author_can_update_post(authenticated_client_other, create_post):
 
 
 @pytest.mark.django_db
-def test_only_author_can_delete_post(authenticated_client_other, create_post):
+def test_only_author_can_update_post(authenticated_client, create_post):
+    response = authenticated_client.patch(
+        f"/api/posts/{create_post.id}/",
+        {
+            "title": "Updated Post",
+        },
+        format="json",
+    )
+    assert response.status_code == 200
+    create_post.refresh_from_db()
+    assert create_post.title == "Updated Post"
+
+
+@pytest.mark.django_db
+def test_only_author_can_delete_post(authenticated_client, create_post):
+    response = authenticated_client.delete(f"/api/posts/{create_post.id}/")
+    assert response.status_code == 204
+    assert not Post.objects.filter(id=create_post.id).exists()
+
+
+@pytest.mark.django_db
+def test_prevent_unauthorized_post_deletion(authenticated_client_other, create_post):
     response = authenticated_client_other.delete(f"/api/posts/{create_post.id}/")
     assert response.status_code == 403
     assert Post.objects.filter(id=create_post.id).exists()
+
+
+@pytest.mark.django_db
+def test_authenticated_user_cannot_see_other_users_draft(
+    authenticated_client, other_user
+):
+    Post.objects.create(
+        title="Other Draft",
+        content="Private draft.",
+        author=other_user,
+        status="DRAFT",
+    )
+    response = authenticated_client.get("/api/posts/")
+    assert response.status_code == 200
+    titles = [post["title"] for post in response.data["results"]]
+    assert "Other Draft" not in titles

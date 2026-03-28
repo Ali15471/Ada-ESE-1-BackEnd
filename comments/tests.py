@@ -106,7 +106,6 @@ def test_delete_comment_by_other_user(authenticated_client_other, create_comment
 
 @pytest.mark.django_db
 def test_post_scoped_comments(api_client, create_post, create_comment):
-    # Create another post and comment
     other_post = Post.objects.create(
         title="Other Post",
         content="This is another post.",
@@ -119,6 +118,14 @@ def test_post_scoped_comments(api_client, create_post, create_comment):
 
     response = api_client.get(f"/api/posts/{create_post.id}/comments/")
     assert response.status_code == 200
-    # Ensure only comments for the specific post are returned
-    for comment in response.data:
+    for comment in response.data["results"]:
         assert comment["post"] == create_post.id
+
+
+@pytest.mark.django_db
+def test_only_author_can_delete_comment(authenticated_client, create_comment):
+    response = authenticated_client.delete(
+        f"/api/posts/{create_comment.post.id}/comments/{create_comment.id}/"
+    )
+    assert response.status_code == 204
+    assert not Comment.objects.filter(id=create_comment.id).exists()

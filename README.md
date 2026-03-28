@@ -129,7 +129,7 @@ Tests cover:
 - Comment scoping (comments only returned for their post)
 
 Coverage report is printed automatically.
-Tests achieve 88% coverage across the accounts, posts, and comments apps. Run pytest to see the full report.
+Tests achieve 93% coverage across the accounts, posts, and comments apps. Run pytest to see the full report.
 
 ## Deployment
 
@@ -138,6 +138,18 @@ Deployed on Render using `render.yaml`. The `build.sh` script handles migrations
 Set all other environment variables in the Render dashboard.
 
 Live API: `https://blog-api-jo4b.onrender.com`
+
+## CI/CD
+
+This repository uses GitHub Actions to run the test suite automatically on every push and pull request to `main`.
+
+The workflow:
+- Runs on Ubuntu with Python 3.12
+- Installs all dependencies from `requirements.txt`
+- Runs `pytest` using SQLite (no external database required in CI)
+- Uses environment variables scoped to the CI environment — no secrets required
+
+The workflow file is located at `.github/workflows/django.yml`.
 
 ## Security
 
