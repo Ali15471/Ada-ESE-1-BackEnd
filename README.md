@@ -129,7 +129,7 @@ Tests cover:
 - Comment scoping (comments only returned for their post)
 
 Coverage report is printed automatically.
-Tests achieve 93% coverage across the accounts, posts, and comments apps. Run pytest to see the full report.
+Tests achieve 90%+ coverage across the accounts, posts, and comments apps. Run pytest to see the full report.
 
 ## Deployment
 
